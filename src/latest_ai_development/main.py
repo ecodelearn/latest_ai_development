@@ -4,6 +4,8 @@ import warnings
 
 from datetime import datetime
 
+default_topic = 'CrewAI with Web Ui Framework'
+
 from latest_ai_development.crew import LatestAiDevelopment
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
@@ -18,12 +20,12 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'Open Source AI agent Model Context Protocol MCP',
+        'topic': default_topic,
         'current_year': str(datetime.now().year)
     }
     
     try:
-        LatestAiDevelopment().crew().kickoff(inputs=inputs)
+        LatestAiDevelopment(topic=default_topic).crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -33,7 +35,7 @@ def train():
     Train the crew for a given number of iterations.
     """
     inputs = {
-        "topic": "Open Source AI agent Model Context Protocol MCP"
+        "topic": default_topic
     }
     try:
         LatestAiDevelopment().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
@@ -46,7 +48,7 @@ def replay():
     Replay the crew execution from a specific task.
     """
     try:
-        LatestAiDevelopment().crew().replay(task_id=sys.argv[1])
+        LatestAiDevelopment(topic=default_topic).crew().replay(task_id=sys.argv[1])
 
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
@@ -56,11 +58,11 @@ def test():
     Test the crew execution and returns the results.
     """
     inputs = {
-        "topic": "Open Source AI agent Model Context Protocol MCP",
+        "topic": default_topic,
         "current_year": str(datetime.now().year)
     }
     try:
-        LatestAiDevelopment().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
+        LatestAiDevelopment(topic=default_topic).crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
 
     except Exception as e:
         raise Exception(f"An error occurred while testing the crew: {e}")
