@@ -1,54 +1,132 @@
-# LatestAiDevelopment Crew
+# Enhanced Search Tool for CrewAI
 
-Welcome to the LatestAiDevelopment Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+This project extends CrewAI's search capabilities with advanced Google search operators, providing more precise and powerful search functionality.
+
+## Features
+
+The enhanced search tool includes support for various Google search operators:
+
+- 🔍 **Exact Phrase Matching**: Search for exact phrases using quotation marks
+- 📄 **File Type Filtering**: Limit results to specific file types (PDF, DOC, etc.)
+- 🌐 **Site-Specific Search**: Search within specific websites or domains
+- 📝 **Title Search**: Search for keywords in page titles
+- 🔗 **URL Search**: Search for keywords in URLs
+- 📚 **Text Content Search**: Search for keywords in page content
+- 📅 **Date Range Filtering**: Filter results by date
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
-
-First, if you haven't already, install uv:
-
+1. Clone the repository
+2. Install dependencies:
 ```bash
-pip install uv
+pip install crewai crewai-tools
 ```
 
-Next, navigate to your project directory and install the dependencies:
+## Usage
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+### Basic Configuration
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+```python
+from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
 
-- Modify `src/latest_ai_development/config/agents.yaml` to define your agents
-- Modify `src/latest_ai_development/config/tasks.yaml` to define your tasks
-- Modify `src/latest_ai_development/crew.py` to add your own logic, tools and specific args
-- Modify `src/latest_ai_development/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
-
-```bash
-$ crewai run
+# Create and configure the search tool
+search_tool = EnhancedSearchTool()
+search_config = search_tool.builder("your search topic")
+search_tool.configure(search_config)
 ```
 
-This command initializes the latest-ai-development Crew, assembling the agents and assigning them tasks as defined in your configuration.
+### Advanced Search Examples
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+1. **Search with File Type Filter**:
+```python
+search_config = search_tool.builder("AI research papers")
+    .with_file_type("pdf")
+    .with_date_range(after="2023-01-01")
+```
 
-## Understanding Your Crew
+2. **Site-Specific Search**:
+```python
+search_config = search_tool.builder("machine learning")
+    .with_site("arxiv.org")
+    .with_exact_phrase(True)
+```
 
-The latest-ai-development Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+3. **Combined Filters**:
+```python
+search_config = search_tool.builder("neural networks")
+    .with_file_type("pdf")
+    .with_site("stanford.edu")
+    .with_title("introduction")
+    .with_date_range(after="2024-01-01")
+```
 
-## Support
+### Integration with CrewAI
 
-For support, questions, or feedback regarding the LatestAiDevelopment Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+The enhanced search tool is automatically integrated with the researcher agent:
 
-Let's create wonders together with the power and simplicity of crewAI.
+```python
+# Configure search with topic
+search_config = search_tool.builder("your research topic")
+search_tool.configure(search_config)
+
+# Create crew instance
+crew = LatestAiDevelopment()
+crew.researcher = lambda: Agent(
+    config=crew.agents_config['researcher'],
+    verbose=True,
+    tools=[search_tool]
+)
+
+# Run the crew
+crew.crew().kickoff(inputs=search_config.as_dict)
+```
+
+## Search Configuration Options
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `with_file_type()` | Filter by file extension | `.with_file_type("pdf")` |
+| `with_site()` | Search within specific domain | `.with_site("example.com")` |
+| `with_title()` | Search in page titles | `.with_title("guide")` |
+| `with_url()` | Search in URLs | `.with_url("docs")` |
+| `with_text()` | Search in page content | `.with_text("python")` |
+| `with_date_range()` | Filter by date | `.with_date_range(before="2024-12-31")` |
+| `with_exact_phrase()` | Enable exact matching | `.with_exact_phrase(True)` |
+
+## Best Practices
+
+1. **Start Broad, Then Refine**:
+   ```python
+   # Start with basic search
+   config = search_tool.builder("AI ethics")
+   
+   # Refine based on results
+   config.with_site("academic-journals.com")
+        .with_file_type("pdf")
+        .with_date_range(after="2023-01-01")
+   ```
+
+2. **Combine Multiple Filters**:
+   ```python
+   config = search_tool.builder("machine learning tutorial")
+        .with_file_type("pdf")
+        .with_title("beginners")
+        .with_exact_phrase(True)
+   ```
+
+3. **Use Date Ranges Effectively**:
+   ```python
+   # Recent results only
+   config.with_date_range(after="2024-01-01")
+   
+   # Specific time period
+   config.with_date_range(after="2023-01-01", before="2023-12-31")
+   ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
