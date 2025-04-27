@@ -4,9 +4,14 @@ import warnings
 
 from datetime import datetime
 
+from crewai import Agent
 from latest_ai_development.crew import LatestAiDevelopment
+from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+
+# Create a global instance of the enhanced search tool
+search_tool = EnhancedSearchTool()
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
@@ -17,13 +22,18 @@ def run():
     """
     Run the crew.
     """
-    inputs = {
-        'topic': 'Open Source AI agent Model Context Protocol MCP',
-        'current_year': str(datetime.now().year)
-    }
+    # Configure search with topic
+    search_config = search_tool.builder('Open Source AI agent Model Context Protocol MCP')
+    search_tool.configure(search_config)
     
     try:
-        LatestAiDevelopment().crew().kickoff(inputs=inputs)
+        crew = LatestAiDevelopment()
+        crew.researcher = lambda: Agent(
+            config=crew.agents_config['researcher'],
+            verbose=True,
+            tools=[search_tool]
+        )
+        crew.crew().kickoff(inputs=search_config.as_dict)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -32,11 +42,18 @@ def train():
     """
     Train the crew for a given number of iterations.
     """
-    inputs = {
-        "topic": "Open Source AI agent Model Context Protocol MCP"
-    }
+    # Configure search with topic
+    search_config = search_tool.builder("Open Source AI agent Model Context Protocol MCP")
+    search_tool.configure(search_config)
+    
     try:
-        LatestAiDevelopment().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+        crew = LatestAiDevelopment()
+        crew.researcher = lambda: Agent(
+            config=crew.agents_config['researcher'],
+            verbose=True,
+            tools=[search_tool]
+        )
+        crew.crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=search_config.as_dict)
 
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
@@ -55,12 +72,18 @@ def test():
     """
     Test the crew execution and returns the results.
     """
-    inputs = {
-        "topic": "Open Source AI agent Model Context Protocol MCP",
-        "current_year": str(datetime.now().year)
-    }
+    # Configure search with topic
+    search_config = search_tool.builder("Open Source AI agent Model Context Protocol MCP")
+    search_tool.configure(search_config)
+    
     try:
-        LatestAiDevelopment().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
+        crew = LatestAiDevelopment()
+        crew.researcher = lambda: Agent(
+            config=crew.agents_config['researcher'],
+            verbose=True,
+            tools=[search_tool]
+        )
+        crew.crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=search_config.as_dict)
 
     except Exception as e:
         raise Exception(f"An error occurred while testing the crew: {e}")

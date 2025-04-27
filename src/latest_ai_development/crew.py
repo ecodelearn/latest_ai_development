@@ -1,10 +1,5 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import SerperDevTool
-
-
-
-search_tool = SerperDevTool()  # ✅ Instantiate it
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -26,8 +21,7 @@ class LatestAiDevelopment():
     def researcher(self) -> Agent:
         return Agent(
             config=self.agents_config['researcher'],
-            verbose=True,
-            tools=[search_tool]
+            verbose=True
         )
 
     @agent
