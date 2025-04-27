@@ -3,12 +3,14 @@ import sys
 import warnings
 
 from datetime import datetime
-
 from crewai import Agent
 from latest_ai_development.crew import LatestAiDevelopment
 from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+
+# Default topic for searches
+default_topic = 'CrewAI with Web Ui Framework'
 
 # Create a global instance of the enhanced search tool
 search_tool = EnhancedSearchTool()
@@ -23,7 +25,7 @@ def run():
     Run the crew.
     """
     # Configure search with topic
-    search_config = search_tool.builder('Open Source AI agent Model Context Protocol MCP')
+    search_config = search_tool.builder(default_topic)
     search_tool.configure(search_config)
     
     try:
@@ -37,13 +39,12 @@ def run():
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
-
 def train():
     """
     Train the crew for a given number of iterations.
     """
     # Configure search with topic
-    search_config = search_tool.builder("Open Source AI agent Model Context Protocol MCP")
+    search_config = search_tool.builder(default_topic)
     search_tool.configure(search_config)
     
     try:
@@ -73,7 +74,7 @@ def test():
     Test the crew execution and returns the results.
     """
     # Configure search with topic
-    search_config = search_tool.builder("Open Source AI agent Model Context Protocol MCP")
+    search_config = search_tool.builder(default_topic)
     search_tool.configure(search_config)
     
     try:

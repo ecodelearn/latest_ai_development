@@ -1,10 +1,40 @@
-# Enhanced Search Tool for CrewAI
+# LatestAiDevelopment Crew
 
-This project extends CrewAI's search capabilities with advanced Google search operators, providing more precise and powerful search functionality.
+Welcome to the LatestAiDevelopment Crew project, powered by [crewAI](https://crewai.com). This project now includes enhanced search capabilities with advanced Google search operators.
 
-## Features
+## Installation
 
-The enhanced search tool includes support for various Google search operators:
+Ensure you have Python >=3.11 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling.
+
+First, if you haven't already, install uv:
+```bash
+pip install uv
+```
+
+Then install the required dependencies:
+```bash
+pip install crewai crewai-tools
+```
+
+(Optional) Lock the dependencies using the CLI command:
+```bash
+crewai install
+```
+
+## Configuration
+
+Before running the project, set up the necessary API keys:
+```bash
+cp .env_example .env
+```
+
+Add your API keys to the `.env` file:
+- `OPENAI_API_KEY`: Your API key for accessing OpenAI models
+- `SERPER_API_KEY`: Your API key for using the SerperDevTool
+
+## Enhanced Search Features
+
+The project includes an advanced search tool with various Google search operators:
 
 - 🔍 **Exact Phrase Matching**: Search for exact phrases using quotation marks
 - 📄 **File Type Filtering**: Limit results to specific file types (PDF, DOC, etc.)
@@ -14,17 +44,7 @@ The enhanced search tool includes support for various Google search operators:
 - 📚 **Text Content Search**: Search for keywords in page content
 - 📅 **Date Range Filtering**: Filter results by date
 
-## Installation
-
-1. Clone the repository
-2. Install dependencies:
-```bash
-pip install crewai crewai-tools
-```
-
-## Usage
-
-### Basic Configuration
+### Using the Enhanced Search
 
 ```python
 from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
@@ -32,56 +52,13 @@ from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
 # Create and configure the search tool
 search_tool = EnhancedSearchTool()
 search_config = search_tool.builder("your search topic")
-search_tool.configure(search_config)
-```
-
-### Advanced Search Examples
-
-1. **Search with File Type Filter**:
-```python
-search_config = search_tool.builder("AI research papers")
     .with_file_type("pdf")
-    .with_date_range(after="2023-01-01")
-```
-
-2. **Site-Specific Search**:
-```python
-search_config = search_tool.builder("machine learning")
-    .with_site("arxiv.org")
-    .with_exact_phrase(True)
-```
-
-3. **Combined Filters**:
-```python
-search_config = search_tool.builder("neural networks")
-    .with_file_type("pdf")
-    .with_site("stanford.edu")
-    .with_title("introduction")
+    .with_site("example.com")
     .with_date_range(after="2024-01-01")
-```
-
-### Integration with CrewAI
-
-The enhanced search tool is automatically integrated with the researcher agent:
-
-```python
-# Configure search with topic
-search_config = search_tool.builder("your research topic")
 search_tool.configure(search_config)
-
-# Create crew instance
-crew = LatestAiDevelopment()
-crew.researcher = lambda: Agent(
-    config=crew.agents_config['researcher'],
-    verbose=True,
-    tools=[search_tool]
-)
-
-# Run the crew
-crew.crew().kickoff(inputs=search_config.as_dict)
 ```
 
-## Search Configuration Options
+### Search Configuration Options
 
 | Method | Description | Example |
 |--------|-------------|---------|
@@ -93,35 +70,47 @@ crew.crew().kickoff(inputs=search_config.as_dict)
 | `with_date_range()` | Filter by date | `.with_date_range(before="2024-12-31")` |
 | `with_exact_phrase()` | Enable exact matching | `.with_exact_phrase(True)` |
 
-## Best Practices
+## Project Customization
+
+- Modify `src/latest_ai_development/config/agents.yaml` to define your agents
+- Modify `src/latest_ai_development/config/tasks.yaml` to define your tasks
+- Modify `src/latest_ai_development/crew.py` to add your own logic and tools
+- Modify `src/latest_ai_development/main.py` to set the `default_topic` variable
+
+## Running the Project
+
+Execute from the root folder:
+```bash
+$ crewai run
+```
+
+This will create a markdown file with research results on your specified topic.
+
+## Understanding Your Crew
+
+The LatestAiDevelopment Crew consists of multiple AI agents collaborating on tasks. Each agent has unique roles and tools, defined in:
+- `config/agents.yaml`: Agent capabilities and configurations
+- `config/tasks.yaml`: Task definitions and dependencies
+
+## Search Best Practices
 
 1. **Start Broad, Then Refine**:
    ```python
-   # Start with basic search
    config = search_tool.builder("AI ethics")
-   
-   # Refine based on results
-   config.with_site("academic-journals.com")
+        .with_site("academic-journals.com")
         .with_file_type("pdf")
-        .with_date_range(after="2023-01-01")
    ```
 
-2. **Combine Multiple Filters**:
+2. **Use Date Ranges Effectively**:
    ```python
-   config = search_tool.builder("machine learning tutorial")
-        .with_file_type("pdf")
-        .with_title("beginners")
-        .with_exact_phrase(True)
+   config.with_date_range(after="2024-01-01", before="2024-12-31")
    ```
 
-3. **Use Date Ranges Effectively**:
-   ```python
-   # Recent results only
-   config.with_date_range(after="2024-01-01")
-   
-   # Specific time period
-   config.with_date_range(after="2023-01-01", before="2023-12-31")
-   ```
+## Support
+
+- Visit our [documentation](https://docs.crewai.com)
+- Join our [Discord](https://discord.com/invite/X4JWnZnxPb)
+- Check our [GitHub repository](https://github.com/joaomdmoura/crewai)
 
 ## Contributing
 
@@ -130,3 +119,9 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+# LatestAiDevelopment Crew (Português Brasileiro)
+
+[Original Portuguese content remains unchanged...]

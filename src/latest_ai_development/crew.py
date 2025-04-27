@@ -9,6 +9,9 @@ from crewai.project import CrewBase, agent, crew, task
 class LatestAiDevelopment():
     """LatestAiDevelopment crew"""
 
+    def __init__(self, topic: str):
+        self.topic = topic
+
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
     # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
@@ -44,8 +47,9 @@ class LatestAiDevelopment():
     def reporting_task(self) -> Task:
         return Task(
             config=self.tasks_config['reporting_task'],
-            output_file='report.md'
+            output_file=f'{self.topic}_report.md',
         )
+        
 
     @crew
     def crew(self) -> Crew:
