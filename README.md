@@ -174,7 +174,7 @@ O projeto inclui uma ferramenta de busca avançada com vários operadores do Goo
 - 📚 **Busca em Conteúdo**: Pesquisa por palavras-chave no conteúdo das páginas
 - 📅 **Filtro por Data**: Filtra resultados por data
 
-### Usando a Busca Avançada
+### Usando a Busca Avançada.
 
 ```python
 from latest_ai_development.tools.enhanced_search_tool import EnhancedSearchTool
